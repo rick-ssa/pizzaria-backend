@@ -10,7 +10,7 @@ createDatabase()
 const ordersRoute = require('./routes/orders')
 
 app.use(express.json())
-app.use('/orders',ordersRoute)
+// app.use('/orders',ordersRoute)
 app.use('/pizzas',pizzas)
 
 app.get('/',(req,res)=>{

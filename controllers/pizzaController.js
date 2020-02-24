@@ -12,7 +12,7 @@ const controller = {
                 return console.error(err)
             }
 
-            return res.sendStatus(200)
+            return res.sendStatus(201)
         })
     
         closeDataBase(db)
