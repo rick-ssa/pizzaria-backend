@@ -17,6 +17,12 @@ const dbFunctions = {
                'ingredients TEXT' +
         ');')
     },
+
+    createOrdersTable: (db) => {
+        db.run('CREATE TABLE IF NOT EXISTS orders (' +
+               'items TEXT NOT NULL' +
+        ');')
+    },
 }
 
 module.exports = dbFunctions
