@@ -22,7 +22,7 @@ const controller = {
     index: (req,res) => {
         let db = openDataBase(databaseName,sqlite.OPEN_READONLY)
 
-        db.all('SELECT * FROM pizzas',(err,rows)=>{
+        db.all('SELECT rowid as id,* FROM pizzas',(err,rows)=>{
             return res.send(rows.map(row=>{
                 if(row.ingredients) {
                     return {...row, ingredients: row.ingredients.split(',')}
@@ -38,10 +38,10 @@ const controller = {
     show: (req,res) => {
         let db = openDataBase(databaseName,sqlite.OPEN_READONLY)
 
-        db.get('SELECT * FROM pizzas WHERE rowid = ?',[req.params.id],(err,row)=>{
+        db.get('SELECT rowid as id, * FROM pizzas WHERE rowid = ?',[req.params.id],(err,row)=>{
             if(row){
                 if(row.ingredients) {
-                    return res.send(row)
+                    return res.send({...row})
                 }
                 return res.send({...row, ingredients:[]})
             }
