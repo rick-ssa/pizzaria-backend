@@ -30,9 +30,55 @@ const controller = {
 
         closeDataBase(db)
     },
-    show: {},
-    delete: {},
-    update: {},
+    show: (req,res) => {
+        let db = openDataBase(databaseName,sqlite.OPEN_READONLY)
+
+        let {id} = req.params
+
+        db.get('SELECT rowid, * FROM orders WHERE rowid = (?)',[id],(err,row)=>{
+            if(err) {
+                return console.log(err)
+            }
+
+            if(row) {
+                return res.send({id: row.rowid, items: JSON.parse(row.items)})
+            }
+
+            return res.sendStatus(204)
+
+        })
+        closeDataBase(db)
+    },
+    destroy: (req,res)=>{
+        let db = openDataBase(databaseName,sqlite.OPEN_READWRITE)
+        let {id} = req.params
+
+        db.run('DELETE FROM orders WHERE rowid = (?)',[id],err=>{
+            if(err) {
+                return console.log(err)
+            }
+
+            return res.sendStatus(200)
+        })
+
+
+        closeDataBase(db)
+    },
+    update: (req,res)=>{
+        let db = openDataBase(databaseName,sqlite.OPEN_READWRITE)
+
+        let {id} = req.params
+        let newOrder = req.body
+
+        db.run('UPDATE orders SET items = (?) WHERE rowid = (?)',[JSON.stringify(newOrder.items),id],(err)=>{
+            if(err){
+                return console.log(err)
+            }
+
+            return res.sendStatus(200)
+        })
+        closeDataBase(db)
+    },
 }
 
 module.exports = controller
